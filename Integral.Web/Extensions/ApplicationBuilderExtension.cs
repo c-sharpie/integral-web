@@ -1,4 +1,5 @@
-﻿using Integral.Middlewares;
+﻿using System;
+using Integral.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
 namespace Integral.Extensions
@@ -9,6 +10,13 @@ namespace Integral.Extensions
         {
             applicationBuilder.UseWebSockets();
             applicationBuilder.UseMiddleware<WebSocketMiddleware>();
+        }
+
+        public static void UseFileServer(this IApplicationBuilder applicationBuilder, Action<FileServerOptions> configureOptions)
+        {
+            FileServerOptions fileServerOptions = new FileServerOptions();
+            configureOptions(fileServerOptions);
+            applicationBuilder.UseFileServer(fileServerOptions);
         }
     }
 }

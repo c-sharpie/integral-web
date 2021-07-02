@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Integral" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Integral.Web.Interface\Integral.Web.Interface.csproj" />
