@@ -10,7 +10,7 @@ namespace Integral.Tests
     [TestClass]
     public class IdentityTest
     {
-        private static readonly string ProjectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+        private static readonly string ProjectDirectory = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
 
         private static readonly string ConnectionString = $"DataSource={ProjectDirectory}\\Test.db";
 

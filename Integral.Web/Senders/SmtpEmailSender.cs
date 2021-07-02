@@ -7,29 +7,32 @@ namespace Integral.Senders
 {
     public sealed class SmtpEmailSender : EmailSender
     {
-        private readonly MailAddress mailAddress;
+        private readonly SmtpClient smtpClient;
 
-        private readonly SmtpClient smtpClient = new SmtpClient();
+        public SmtpEmailSender(SmtpClient smtpClient) => this.smtpClient = smtpClient;
 
         public SmtpEmailSender(EmailSenderOptions emailSenderOptions)
         {
-            this.mailAddress = new MailAddress(emailSenderOptions.Address, emailSenderOptions.Display);
+            this.smtpClient = new SmtpClient(emailSenderOptions.Host, emailSenderOptions.Port);
             this.smtpClient.Credentials = new NetworkCredential(emailSenderOptions.Username, emailSenderOptions.Password);
             this.smtpClient.EnableSsl = emailSenderOptions.EnableSsl;
             this.smtpClient.Timeout = emailSenderOptions.Timeout;
-            this.smtpClient.Host = emailSenderOptions.Host;
-            this.smtpClient.Port = emailSenderOptions.Port;
         }
 
-        public async Task Send(string email, string subject, string body)
+        public async Task Send(MailMessage mailMessage) => await this.smtpClient.SendMailAsync(mailMessage);
+
+        public async Task Send(MailAddress from, MailAddress to, string subject, string body, bool isBodyHtml = false)
         {
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.To.Add(email);
-            mailMessage.From = mailAddress;
+            MailMessage mailMessage = new MailMessage(from, to);
             mailMessage.Subject = subject;
             mailMessage.Body = body;
-            mailMessage.IsBodyHtml = true;
-            await this.smtpClient.SendMailAsync(mailMessage);
+            mailMessage.IsBodyHtml = isBodyHtml;
+            await this.Send(mailMessage);
+        }
+
+        public async Task Send(string from, string to, string subject, string body, string? display, bool isBodyHtml = false)
+        {
+            await this.Send(new MailAddress(from, display), new MailAddress(to), subject, body, isBodyHtml);
         }
     }
 }
